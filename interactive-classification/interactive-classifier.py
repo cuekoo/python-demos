@@ -17,10 +17,10 @@ def mainhelp():
 class MyData:
     def __init__(self, data):
         self.ax = plt.gca()
-        self.cid1 = self.ax.figure.canvas.mpl_connect('button_press_event', self.append_data)
-        self.cid2 = self.ax.figure.canvas.mpl_connect('key_press_event', self.classify_data)
-        self.cid3 = self.ax.figure.canvas.mpl_connect('key_press_event', self.clear_data)
-        self.cid3 = self.ax.figure.canvas.mpl_connect('key_press_event', self.change_mode)
+        self.ax.figure.canvas.mpl_connect('button_press_event', self.append_data)
+        self.ax.figure.canvas.mpl_connect('key_press_event', self.classify_data)
+        self.ax.figure.canvas.mpl_connect('key_press_event', self.clear_data)
+        self.ax.figure.canvas.mpl_connect('key_press_event', self.change_mode)
         self.data = data
         self.label = np.empty((0, 1), int)
         self.mode = self.ax.annotate('positive', xy=(0.1, 9.7), color='r')
@@ -64,6 +64,8 @@ class MyData:
         Z = self.clf.predict(np.c_[X.ravel(), Y.ravel()])
         Z = Z.reshape(X.shape)
         self.ax.contourf(X, Y, Z, levels=[1,1.5])
+        self.ax.texts.remove(self.mode)
+        self.mode = self.ax.annotate('classification result', xy=(0.1, 9.7), color='r')
         self.ax.figure.canvas.draw()
 
     def clear_data(self, event):
